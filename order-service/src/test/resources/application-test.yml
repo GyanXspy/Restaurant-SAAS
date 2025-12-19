@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: order-service-test
+  
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+    
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "com.restaurant.events"
+
+# Saga timeout and retry configuration for testing (shorter timeouts)
+saga:
+  timeout:
+    cart-validation: PT5S  # 5 seconds
+    payment-processing: PT10S  # 10 seconds
+    order-confirmation: PT3S  # 3 seconds
+    max-retry-attempts: 2  # Fewer retries for faster tests
+    initial-retry-delay: PT500MS  # 500 milliseconds
+    retry-multiplier: 2.0
+    max-retry-delay: PT10S  # 10 seconds
+
+logging:
+  level:
+    com.restaurant.order: DEBUG
+    org.springframework.kafka: WARN
+    org.hibernate.SQL: DEBUG
+    org.springframework.test: DEBUG

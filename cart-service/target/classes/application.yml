@@ -1,0 +1,115 @@
+spring:
+  application:
+    name: cart-service
+  
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/cart_service?maxPoolSize=15&minPoolSize=3&maxIdleTimeMS=300000&maxLifeTimeMS=1800000&waitQueueTimeoutMS=30000&serverSelectionTimeoutMS=30000&connectTimeoutMS=30000&socketTimeoutMS=30000}
+      database: cart_service
+      
+      # Additional MongoDB connection settings
+      options:
+        max-connection-pool-size: ${MONGODB_POOL_MAX_SIZE:15}
+        min-connection-pool-size: ${MONGODB_POOL_MIN_SIZE:3}
+        max-connection-idle-time: ${MONGODB_POOL_MAX_IDLE_TIME:300000}  # 5 minutes
+        max-connection-life-time: ${MONGODB_POOL_MAX_LIFE_TIME:1800000}  # 30 minutes
+        connection-timeout: ${MONGODB_CONNECTION_TIMEOUT:30000}  # 30 seconds
+        socket-timeout: ${MONGODB_SOCKET_TIMEOUT:30000}  # 30 seconds
+        server-selection-timeout: ${MONGODB_SERVER_SELECTION_TIMEOUT:30000}  # 30 seconds
+        wait-queue-timeout: ${MONGODB_WAIT_QUEUE_TIMEOUT:30000}  # 30 seconds
+  
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+    
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: "com.restaurant.events"
+
+server:
+  port: ${SERVER_PORT:8083}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,circuitbreakers,bulkheads,retries
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+    bulkheads:
+      enabled: true
+
+# Resilience4j Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      mongodb:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 25s
+        sliding-window-size: 8
+        minimum-number-of-calls: 4
+        permitted-number-of-calls-in-half-open-state: 2
+        slow-call-rate-threshold: 60
+        slow-call-duration-threshold: 4s
+        register-health-indicator: true
+      external-service:
+        failure-rate-threshold: 60
+        wait-duration-in-open-state: 20s
+        sliding-window-size: 6
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
+        slow-call-rate-threshold: 70
+        slow-call-duration-threshold: 3s
+        register-health-indicator: true
+  
+  bulkhead:
+    instances:
+      mongodb:
+        max-concurrent-calls: 12
+        max-wait-duration: 1s
+      external-service:
+        max-concurrent-calls: 8
+        max-wait-duration: 2s
+  
+  retry:
+    instances:
+      mongodb:
+        max-attempts: 3
+        wait-duration: 600ms
+        exponential-backoff-multiplier: 1.6
+        retry-exceptions:
+          - com.mongodb.MongoException
+          - org.springframework.dao.DataAccessException
+      external-service:
+        max-attempts: 2
+        wait-duration: 1s
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - java.net.ConnectException
+          - java.net.SocketTimeoutException
+          - org.springframework.web.client.ResourceAccessException
+
+logging:
+  level:
+    com.restaurant.cart: DEBUG
+    org.springframework.kafka: INFO
+    io.github.resilience4j: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

@@ -1,0 +1,70 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: user-service
+  
+  # MongoDB Configuration
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/user_service?maxPoolSize=20&minPoolSize=5&maxIdleTimeMS=300000&maxLifeTimeMS=1800000&waitQueueTimeoutMS=30000&serverSelectionTimeoutMS=30000&connectTimeoutMS=30000&socketTimeoutMS=30000}
+      database: user_service
+      
+      # Additional MongoDB connection settings
+      options:
+        max-connection-pool-size: ${MONGODB_POOL_MAX_SIZE:20}
+        min-connection-pool-size: ${MONGODB_POOL_MIN_SIZE:5}
+        max-connection-idle-time: ${MONGODB_POOL_MAX_IDLE_TIME:300000}  # 5 minutes
+        max-connection-life-time: ${MONGODB_POOL_MAX_LIFE_TIME:1800000}  # 30 minutes
+        connection-timeout: ${MONGODB_CONNECTION_TIMEOUT:30000}  # 30 seconds
+        socket-timeout: ${MONGODB_SOCKET_TIMEOUT:30000}  # 30 seconds
+        server-selection-timeout: ${MONGODB_SERVER_SELECTION_TIMEOUT:30000}  # 30 seconds
+        wait-queue-timeout: ${MONGODB_WAIT_QUEUE_TIMEOUT:30000}  # 30 seconds
+  
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    
+    # Producer Configuration
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+    
+    # Consumer Configuration
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: "com.restaurant.events"
+
+# Management and Monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    mongo:
+      enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    com.restaurant.user: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.data.mongodb: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

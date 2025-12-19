@@ -1,0 +1,229 @@
+# Alerting rules for Restaurant Food Ordering System
+
+groups:
+  - name: application_alerts
+    rules:
+      # Service Health Alerts
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} has been down for more than 1 minute."
+
+      - alert: HighErrorRate
+        expr: rate(http_server_requests_total{status=~"5.."}[5m]) / rate(http_server_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate on {{ $labels.job }}"
+          description: "Error rate is {{ $value | humanizePercentage }} on {{ $labels.job }}"
+
+      # Saga Processing Alerts
+      - alert: LowSagaSuccessRate
+        expr: (rate(sagas_completed_total[5m]) / (rate(sagas_completed_total[5m]) + rate(sagas_failed_total[5m]))) < 0.95
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low saga success rate"
+          description: "Saga success rate is {{ $value | humanizePercentage }} which is below 95%"
+
+      - alert: HighActiveSagas
+        expr: sagas_active_current > 100
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of active sagas"
+          description: "There are {{ $value }} active sagas, which exceeds the threshold of 100"
+
+      - alert: SagaProcessingTimeout
+        expr: histogram_quantile(0.95, rate(sagas_execution_duration_bucket[5m])) > 30
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Saga processing taking too long"
+          description: "95th percentile saga execution time is {{ $value }}s"
+
+      # Event Processing Alerts
+      - alert: HighEventProcessingErrors
+        expr: rate(events_processing_errors_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High event processing error rate"
+          description: "Event processing error rate is {{ $value }} errors/second"
+
+      - alert: EventProcessingLag
+        expr: histogram_quantile(0.95, rate(events_processing_duration_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Event processing lag detected"
+          description: "95th percentile event processing time is {{ $value }}s"
+
+      # Database Alerts
+      - alert: DatabaseConnectionPoolHigh
+        expr: hikaricp_connections_active / hikaricp_connections_max > 0.8
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database connection pool utilization high"
+          description: "Connection pool utilization is {{ $value | humanizePercentage }} on {{ $labels.job }}"
+
+      - alert: DatabaseSlowQueries
+        expr: histogram_quantile(0.95, rate(hikaricp_connections_usage_bucket[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database queries are slow"
+          description: "95th percentile database query time is {{ $value }}s on {{ $labels.job }}"
+
+      # Kafka Alerts
+      - alert: KafkaConsumerLag
+        expr: kafka_consumer_lag_sum > 1000
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Kafka consumer lag is high"
+          description: "Consumer lag is {{ $value }} messages on {{ $labels.topic }}"
+
+      - alert: KafkaPartitionOffline
+        expr: kafka_cluster_partition_offline > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Kafka partition is offline"
+          description: "{{ $value }} Kafka partitions are offline"
+
+      # Resource Alerts
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }}"
+
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value }}% on {{ $labels.instance }}"
+
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Disk space is low"
+          description: "Disk space is {{ $value | humanizePercentage }} full on {{ $labels.instance }}"
+
+  - name: business_alerts
+    rules:
+      # Business Logic Alerts
+      - alert: OrderProcessingStalled
+        expr: increase(sagas_started_total[10m]) == 0 and increase(http_server_requests_total{uri="/api/orders"}[10m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Order processing appears to be stalled"
+          description: "Orders are being received but no sagas are being started"
+
+      - alert: PaymentFailureSpike
+        expr: rate(sagas_failed_total{failure_reason="payment_failed"}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Payment failure rate is high"
+          description: "Payment failure rate is {{ $value }} failures/second"
+
+      - alert: CartValidationFailureSpike
+        expr: rate(sagas_failed_total{failure_reason="cart_validation_failed"}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Cart validation failure rate is high"
+          description: "Cart validation failure rate is {{ $value }} failures/second"      #
+ Enhanced Business Metrics Alerts
+      - alert: LowOrderSuccessRate
+        expr: (rate(orders_confirmed_total[10m]) / rate(orders_created_total[10m])) * 100 < 80
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Order success rate is critically low"
+          description: "Order success rate is {{ $value | humanizePercentage }} which is below 80%"
+
+      - alert: HighOrderCancellationRate
+        expr: (rate(orders_cancelled_total[10m]) / rate(orders_created_total[10m])) * 100 > 20
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Order cancellation rate is high"
+          description: "Order cancellation rate is {{ $value | humanizePercentage }} which is above 20%"
+
+      - alert: HighPaymentFailureRate
+        expr: (rate(payments_failed_total[10m]) / rate(payments_initiated_total[10m])) * 100 > 10
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Payment failure rate is high"
+          description: "Payment failure rate is {{ $value | humanizePercentage }} which is above 10%"
+
+      - alert: LongSagaProcessingTime
+        expr: histogram_quantile(0.95, rate(saga_processing_duration_seconds_bucket[5m])) > 60
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Saga processing time is too long"
+          description: "95th percentile saga processing time is {{ $value }}s which is above 60s"
+
+      - alert: HighCartValidationFailureRate
+        expr: (rate(cart_validations_failed_total[10m]) / rate(cart_validations_requested_total[10m])) * 100 > 15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Cart validation failure rate is high"
+          description: "Cart validation failure rate is {{ $value | humanizePercentage }} which is above 15%"
+
+      - alert: NoOrdersProcessed
+        expr: increase(orders_created_total[30m]) == 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "No orders have been processed recently"
+          description: "No orders have been created in the last 30 minutes"
+
+      - alert: PaymentProcessingStalled
+        expr: increase(payments_initiated_total[15m]) > 0 and increase(payments_completed_total[15m]) == 0 and increase(payments_failed_total[15m]) == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Payment processing appears to be stalled"
+          description: "Payments are being initiated but none are completing or failing"

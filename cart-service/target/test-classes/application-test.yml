@@ -1,0 +1,14 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/cart_service_test
+      database: cart_service_test
+  
+  kafka:
+    bootstrap-servers: localhost:9092
+
+logging:
+  level:
+    com.restaurant.cart: DEBUG
+    org.springframework.kafka: WARN
+    org.testcontainers: INFO
