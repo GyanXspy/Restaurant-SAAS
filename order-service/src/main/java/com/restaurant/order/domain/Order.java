@@ -1,6 +1,8 @@
 package com.restaurant.order.domain;
 
 import com.restaurant.events.DomainEvent;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,6 +15,8 @@ import java.util.UUID;
  * All state changes are captured as domain events and the aggregate
  * can be reconstructed by replaying these events.
  */
+@Getter
+@ToString(of = {"orderId", "customerId", "restaurantId", "status", "totalAmount", "version"})
 public class Order {
     
     private String orderId;
@@ -187,22 +191,8 @@ public class Order {
             .collect(java.util.stream.Collectors.toList());
     }
     
-    // Getters
-    public String getOrderId() { return orderId; }
-    public String getCustomerId() { return customerId; }
-    public String getRestaurantId() { return restaurantId; }
-    public List<OrderItem> getItems() { return new ArrayList<>(items); }
-    public BigDecimal getTotalAmount() { return totalAmount; }
-    public OrderStatus getStatus() { return status; }
-    public String getPaymentId() { return paymentId; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public int getVersion() { return version; }
-    
-    @Override
-    public String toString() {
-        return String.format("Order{orderId='%s', customerId='%s', restaurantId='%s', " +
-                           "status=%s, totalAmount=%s, version=%d}",
-                           orderId, customerId, restaurantId, status, totalAmount, version);
+    // Custom getter for items to return defensive copy
+    public List<OrderItem> getItems() { 
+        return new ArrayList<>(items); 
     }
 }

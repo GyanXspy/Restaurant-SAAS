@@ -15,18 +15,23 @@ public class PaymentCompletedEvent extends DomainEvent {
     private String gatewayResponse;
 
     public PaymentCompletedEvent() {
-        super();
+        super("", 1);
     }
 
     public PaymentCompletedEvent(String paymentId, String orderId, String customerId, 
                                BigDecimal amount, String transactionId, String gatewayResponse) {
-        super(paymentId, LocalDateTime.now());
+        super(paymentId, 1);
         this.paymentId = paymentId;
         this.orderId = orderId;
         this.customerId = customerId;
         this.amount = amount;
         this.transactionId = transactionId;
         this.gatewayResponse = gatewayResponse;
+    }
+
+    @Override
+    public String getEventType() {
+        return "PaymentCompleted";
     }
 
     // Getters and Setters

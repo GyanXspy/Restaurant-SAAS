@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.restaurant.events.DomainEvent;
 import com.restaurant.events.MenuUpdatedEvent;
+import com.restaurant.events.RestaurantAvailabilityChangedEvent;
 import com.restaurant.events.RestaurantCreatedEvent;
 
 /**

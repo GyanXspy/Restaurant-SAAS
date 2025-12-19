@@ -119,7 +119,6 @@ public class ResilienceConfig {
         RetryConfig config = RetryConfig.custom()
             .maxAttempts(3) // Retry up to 3 times
             .waitDuration(Duration.ofMillis(500)) // Wait 500ms between retries
-            .exponentialBackoffMultiplier(1.5) // Exponential backoff: 500ms, 750ms, 1125ms
             .retryOnException(throwable -> {
                 // Retry on specific database exceptions
                 return throwable instanceof java.sql.SQLException ||
@@ -140,7 +139,6 @@ public class ResilienceConfig {
         RetryConfig config = RetryConfig.custom()
             .maxAttempts(2) // Retry up to 2 times for write operations
             .waitDuration(Duration.ofSeconds(1)) // Wait 1s between retries
-            .exponentialBackoffMultiplier(2) // Exponential backoff: 1s, 2s
             .retryOnException(throwable -> {
                 // Retry on specific database exceptions, but be careful with writes
                 return throwable instanceof java.sql.SQLTransientException ||
@@ -161,7 +159,6 @@ public class ResilienceConfig {
         RetryConfig config = RetryConfig.custom()
             .maxAttempts(3) // Retry up to 3 times
             .waitDuration(Duration.ofMillis(800)) // Wait 800ms between retries
-            .exponentialBackoffMultiplier(1.8) // Exponential backoff: 800ms, 1440ms, 2592ms
             .retryOnException(throwable -> {
                 // Retry on specific Kafka exceptions
                 return throwable instanceof org.apache.kafka.common.errors.RetriableException ||

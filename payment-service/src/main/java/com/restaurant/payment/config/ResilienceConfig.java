@@ -59,7 +59,6 @@ public class ResilienceConfig {
         RetryConfig config = RetryConfig.custom()
             .maxAttempts(3) // Retry up to 3 times
             .waitDuration(Duration.ofSeconds(1)) // Wait 1s between retries
-            .exponentialBackoffMultiplier(2) // Exponential backoff: 1s, 2s, 4s
             .retryOnException(throwable -> {
                 // Retry on specific exceptions
                 return throwable instanceof RuntimeException ||

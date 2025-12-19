@@ -126,13 +126,13 @@ public class CartService {
         logger.info("Cleared cart {} for customer {}", cart.getCartId(), customerId);
     }
 
-    public Optional<Cart> getActiveCart(String customerId) {
+    public Optional<Cart> findActiveCart(String customerId) {
         return cartRepository.findByCustomerIdAndStatus(customerId, CartStatus.ACTIVE)
             .filter(cart -> !cart.isExpired());
     }
 
     public Cart getActiveCart(String customerId) {
-        return getActiveCart(customerId)
+        return findActiveCart(customerId)
             .orElseThrow(() -> new IllegalArgumentException("No active cart found for customer: " + customerId));
     }
 

@@ -1,0 +1,6 @@
+com\restaurant\user\domain\UserProfileTest.class
+com\restaurant\user\domain\UserTest.class
+com\restaurant\user\query\UserQueryHandlerTest.class
+com\restaurant\user\command\UserCommandHandlerTest.class
+com\restaurant\user\UserServiceApplicationTest.class
+com\restaurant\user\config\KafkaConfigTest.class

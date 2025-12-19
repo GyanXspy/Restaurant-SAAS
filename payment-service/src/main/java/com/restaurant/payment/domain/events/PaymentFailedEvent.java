@@ -16,12 +16,12 @@ public class PaymentFailedEvent extends DomainEvent {
     private String gatewayResponse;
 
     public PaymentFailedEvent() {
-        super();
+        super("", 1);
     }
 
     public PaymentFailedEvent(String paymentId, String orderId, String customerId, 
                             BigDecimal amount, String failureReason, String errorCode, String gatewayResponse) {
-        super(paymentId, LocalDateTime.now());
+        super(paymentId, 1);
         this.paymentId = paymentId;
         this.orderId = orderId;
         this.customerId = customerId;
@@ -29,6 +29,11 @@ public class PaymentFailedEvent extends DomainEvent {
         this.failureReason = failureReason;
         this.errorCode = errorCode;
         this.gatewayResponse = gatewayResponse;
+    }
+
+    @Override
+    public String getEventType() {
+        return "PaymentFailed";
     }
 
     // Getters and Setters

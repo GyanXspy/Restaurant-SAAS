@@ -39,7 +39,7 @@ public class PaymentInitiationEventHandler {
     @KafkaListener(topics = "payment-initiation-requested", groupId = "payment-service")
     public void handlePaymentInitiationRequested(@Payload PaymentInitiationRequestedEvent event,
                                                 @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                                                @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                                                @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
                                                 @Header(KafkaHeaders.OFFSET) long offset,
                                                 Acknowledgment acknowledgment) {
         

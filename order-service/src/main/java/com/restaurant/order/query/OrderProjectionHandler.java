@@ -43,16 +43,15 @@ public class OrderProjectionHandler {
             String itemsJson = serializeItems(event.getItems());
             
             // Create read model
-            OrderReadModel readModel = new OrderReadModel(
-                event.getAggregateId(),
-                event.getCustomerId(),
-                event.getRestaurantId(),
-                null, // Restaurant name will be enriched later
-                itemsJson,
-                "PENDING",
-                event.getTotalAmount(),
-                null
-            );
+            OrderReadModel readModel = new OrderReadModel();
+            readModel.setId(event.getAggregateId());
+            readModel.setCustomerId(event.getCustomerId());
+            readModel.setRestaurantId(event.getRestaurantId());
+            readModel.setRestaurantName(null); // Restaurant name will be enriched later
+            readModel.setItems(itemsJson);
+            readModel.setStatus("PENDING");
+            readModel.setTotalAmount(event.getTotalAmount());
+            readModel.setPaymentId(null);
             
             readModel.setCreatedAt(event.getOccurredOn());
             readModel.setUpdatedAt(event.getOccurredOn());

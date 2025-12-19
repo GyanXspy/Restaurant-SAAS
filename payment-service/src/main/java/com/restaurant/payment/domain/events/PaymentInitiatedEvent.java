@@ -16,18 +16,23 @@ public class PaymentInitiatedEvent extends DomainEvent {
     private String paymentDetails;
 
     public PaymentInitiatedEvent() {
-        super();
+        super("", 1);
     }
 
     public PaymentInitiatedEvent(String paymentId, String orderId, String customerId, 
                                BigDecimal amount, PaymentMethod paymentMethod, String paymentDetails) {
-        super(paymentId, LocalDateTime.now());
+        super(paymentId, 1);
         this.paymentId = paymentId;
         this.orderId = orderId;
         this.customerId = customerId;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
         this.paymentDetails = paymentDetails;
+    }
+
+    @Override
+    public String getEventType() {
+        return "PaymentInitiated";
     }
 
     // Getters and Setters

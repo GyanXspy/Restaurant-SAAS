@@ -1,12 +1,18 @@
 package com.restaurant.order.domain;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * Value object representing an item in an order.
  * Immutable and contains all necessary information about the ordered item.
  */
+@Getter
+@EqualsAndHashCode
+@ToString
 public class OrderItem {
     
     private final String itemId;
@@ -46,33 +52,5 @@ public class OrderItem {
      */
     public BigDecimal getTotalPrice() {
         return price.multiply(BigDecimal.valueOf(quantity));
-    }
-    
-    // Getters
-    public String getItemId() { return itemId; }
-    public String getName() { return name; }
-    public BigDecimal getPrice() { return price; }
-    public int getQuantity() { return quantity; }
-    
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderItem orderItem = (OrderItem) o;
-        return quantity == orderItem.quantity &&
-               Objects.equals(itemId, orderItem.itemId) &&
-               Objects.equals(name, orderItem.name) &&
-               Objects.equals(price, orderItem.price);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(itemId, name, price, quantity);
-    }
-    
-    @Override
-    public String toString() {
-        return String.format("OrderItem{itemId='%s', name='%s', price=%s, quantity=%d, totalPrice=%s}",
-                           itemId, name, price, quantity, getTotalPrice());
     }
 }

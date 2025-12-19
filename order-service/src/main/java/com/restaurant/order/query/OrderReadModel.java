@@ -1,6 +1,9 @@
 package com.restaurant.order.query;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,6 +22,9 @@ import java.time.LocalDateTime;
     @Index(name = "idx_status", columnList = "status"),
     @Index(name = "idx_created_at", columnList = "createdAt")
 })
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderReadModel {
     
     @Id
@@ -50,101 +56,4 @@ public class OrderReadModel {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-    
-    // Default constructor for JPA
-    public OrderReadModel() {
-    }
-    
-    public OrderReadModel(String id, String customerId, String restaurantId, String restaurantName,
-                         String items, String status, BigDecimal totalAmount, String paymentId) {
-        this.id = id;
-        this.customerId = customerId;
-        this.restaurantId = restaurantId;
-        this.restaurantName = restaurantName;
-        this.items = items;
-        this.status = status;
-        this.totalAmount = totalAmount;
-        this.paymentId = paymentId;
-    }
-    
-    // Getters and Setters
-    public String getId() {
-        return id;
-    }
-    
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    public String getCustomerId() {
-        return customerId;
-    }
-    
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-    
-    public String getRestaurantId() {
-        return restaurantId;
-    }
-    
-    public void setRestaurantId(String restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-    
-    public String getRestaurantName() {
-        return restaurantName;
-    }
-    
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
-    }
-    
-    public String getItems() {
-        return items;
-    }
-    
-    public void setItems(String items) {
-        this.items = items;
-    }
-    
-    public String getStatus() {
-        return status;
-    }
-    
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-    
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-    
-    public String getPaymentId() {
-        return paymentId;
-    }
-    
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
-    }
-    
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

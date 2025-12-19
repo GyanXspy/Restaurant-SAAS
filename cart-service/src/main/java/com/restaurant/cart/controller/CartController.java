@@ -34,7 +34,7 @@ public class CartController {
 
     @GetMapping("/{customerId}")
     public ResponseEntity<Cart> getCart(@PathVariable String customerId) {
-        Optional<Cart> cart = cartService.getActiveCart(customerId);
+        Optional<Cart> cart = cartService.findActiveCart(customerId);
         return cart.map(ResponseEntity::ok)
                   .orElse(ResponseEntity.notFound().build());
     }

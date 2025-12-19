@@ -1,11 +1,15 @@
 package com.restaurant.order.infrastructure.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_read_model")
+@Data
+@NoArgsConstructor
 public class OrderReadModelEntity {
 
     @Id
@@ -35,9 +39,6 @@ public class OrderReadModelEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public OrderReadModelEntity() {
-    }
-
     public OrderReadModelEntity(String id, String customerId, String restaurantId, 
                                String restaurantName, String items, String status, 
                                BigDecimal totalAmount, LocalDateTime createdAt) {
@@ -52,77 +53,8 @@ public class OrderReadModelEntity {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(String restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
-    public String getRestaurantName() {
-        return restaurantName;
-    }
-
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
-    }
-
-    public String getItems() {
-        return items;
-    }
-
-    public void setItems(String items) {
-        this.items = items;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
     public void setStatus(String status) {
         this.status = status;
         this.updatedAt = LocalDateTime.now();
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

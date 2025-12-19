@@ -1,10 +1,14 @@
 package com.restaurant.order.infrastructure.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_events")
+@Data
+@NoArgsConstructor
 public class OrderEventEntity {
 
     @Id
@@ -26,64 +30,11 @@ public class OrderEventEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public OrderEventEntity() {
-        this.createdAt = LocalDateTime.now();
-    }
-
     public OrderEventEntity(String aggregateId, String eventType, String eventData, Integer eventVersion) {
-        this();
         this.aggregateId = aggregateId;
         this.eventType = eventType;
         this.eventData = eventData;
         this.eventVersion = eventVersion;
-    }
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getAggregateId() {
-        return aggregateId;
-    }
-
-    public void setAggregateId(String aggregateId) {
-        this.aggregateId = aggregateId;
-    }
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getEventData() {
-        return eventData;
-    }
-
-    public void setEventData(String eventData) {
-        this.eventData = eventData;
-    }
-
-    public Integer getEventVersion() {
-        return eventVersion;
-    }
-
-    public void setEventVersion(Integer eventVersion) {
-        this.eventVersion = eventVersion;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
     }
 }

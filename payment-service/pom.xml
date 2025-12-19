@@ -49,6 +49,13 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         
+        <!-- Lombok for reducing boilerplate code -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        
         <!-- AspectJ for read/write data source routing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -85,6 +92,14 @@
         <dependency>
             <groupId>com.restaurant</groupId>
             <artifactId>shared-events</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot DevTools for development -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
         
         <!-- Testing -->
@@ -130,6 +145,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
