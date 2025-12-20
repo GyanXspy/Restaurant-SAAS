@@ -29,7 +29,7 @@ public class UserCommandHandler {
         this.eventPublisher = eventPublisher;
     }
     
-    @Transactional
+    // @Transactional - Removed because MongoDB doesn't support transactions without replica sets
     public String handle(@Valid CreateUserCommand command) {
         logger.info("Handling CreateUserCommand for userId: {}", command.getUserId());
         
@@ -42,25 +42,35 @@ public class UserCommandHandler {
             throw new IllegalArgumentException("User with email " + command.getEmail() + " already exists");
         }
         
-        // Create and save user
+        // Create and save user first
         User user = new User(command.getUserId(), command.getEmail(), command.getProfile());
-        User savedUser = userRepository.save(user);
+        logger.info("Created user object: {}", user);
         
-        // Publish domain event
-        UserCreatedEvent event = new UserCreatedEvent(
-            savedUser.getUserId(),
-            savedUser.getEmail(),
-            savedUser.getProfile().getFirstName(),
-            savedUser.getProfile().getLastName(),
-            1
-        );
-        eventPublisher.publish(event);
+        User savedUser = userRepository.save(user);
+        logger.info("User saved to database with ID: {} and MongoDB ID: {}", savedUser.getUserId(), savedUser.getId());
+        
+        // Publish domain event (non-blocking, failures won't affect user creation)
+        try {
+            UserCreatedEvent event = new UserCreatedEvent(
+                savedUser.getUserId(),
+                savedUser.getEmail(),
+                savedUser.getProfile().getFirstName(),
+                savedUser.getProfile().getLastName(),
+                1
+            );
+            eventPublisher.publish(event);
+            logger.info("User created event published for ID: {}", savedUser.getUserId());
+        } catch (Exception e) {
+            logger.error("Failed to publish user created event for ID: {}, but user was saved successfully", 
+                savedUser.getUserId(), e);
+            // Don't throw exception - user creation succeeded even if event publishing failed
+        }
         
         logger.info("User created successfully with ID: {}", savedUser.getUserId());
         return savedUser.getUserId();
     }
     
-    @Transactional
+    // @Transactional - Removed because MongoDB doesn't support transactions without replica sets
     public void handle(@Valid UpdateUserProfileCommand command) {
         logger.info("Handling UpdateUserProfileCommand for userId: {}", command.getUserId());
         
@@ -85,7 +95,7 @@ public class UserCommandHandler {
         logger.info("User profile updated successfully for userId: {}", savedUser.getUserId());
     }
     
-    @Transactional
+    // @Transactional - Removed because MongoDB doesn't support transactions without replica sets
     public void handle(@Valid DeactivateUserCommand command) {
         logger.info("Handling DeactivateUserCommand for userId: {}", command.getUserId());
         

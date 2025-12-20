@@ -1,11 +1,19 @@
 package com.restaurant.cart.domain;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * Value object representing an item in the shopping cart.
  */
+@Getter
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class CartItem {
     
     private String itemId;
@@ -13,10 +21,6 @@ public class CartItem {
     private BigDecimal price;
     private int quantity;
     private String restaurantId;
-
-    public CartItem() {
-        // Default constructor for MongoDB
-    }
 
     public CartItem(String itemId, String name, BigDecimal price, int quantity, String restaurantId) {
         if (itemId == null || itemId.trim().isEmpty()) {
@@ -48,40 +52,5 @@ public class CartItem {
 
     public CartItem withQuantity(int newQuantity) {
         return new CartItem(itemId, name, price, newQuantity, restaurantId);
-    }
-
-    // Getters
-    public String getItemId() { return itemId; }
-    public String getName() { return name; }
-    public BigDecimal getPrice() { return price; }
-    public int getQuantity() { return quantity; }
-    public String getRestaurantId() { return restaurantId; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CartItem cartItem = (CartItem) o;
-        return quantity == cartItem.quantity &&
-               Objects.equals(itemId, cartItem.itemId) &&
-               Objects.equals(name, cartItem.name) &&
-               Objects.equals(price, cartItem.price) &&
-               Objects.equals(restaurantId, cartItem.restaurantId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(itemId, name, price, quantity, restaurantId);
-    }
-
-    @Override
-    public String toString() {
-        return "CartItem{" +
-               "itemId='" + itemId + '\'' +
-               ", name='" + name + '\'' +
-               ", price=" + price +
-               ", quantity=" + quantity +
-               ", restaurantId='" + restaurantId + '\'' +
-               '}';
     }
 }

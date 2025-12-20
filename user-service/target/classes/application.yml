@@ -8,8 +8,8 @@ spring:
   # MongoDB Configuration
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/user_service?maxPoolSize=20&minPoolSize=5&maxIdleTimeMS=300000&maxLifeTimeMS=1800000&waitQueueTimeoutMS=30000&serverSelectionTimeoutMS=30000&connectTimeoutMS=30000&socketTimeoutMS=30000}
-      database: user_service
+      uri: ${MONGODB_URI:mongodb://localhost:27017/User_Service?maxPoolSize=20&minPoolSize=5&maxIdleTimeMS=300000&maxLifeTimeMS=1800000&waitQueueTimeoutMS=30000&serverSelectionTimeoutMS=30000&connectTimeoutMS=30000&socketTimeoutMS=30000
+      database: User_Service
       
       # Additional MongoDB connection settings
       options:

@@ -1,33 +1,33 @@
 package com.restaurant.cart.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Cart aggregate representing a customer's shopping cart.
  */
 @Document(collection = "carts")
+@Getter
+@NoArgsConstructor
+@ToString(of = {"cartId", "customerId", "restaurantId", "status", "createdAt", "updatedAt", "expiresAt"})
 public class Cart {
     
     @Id
     private String cartId;
     private String customerId;
     private String restaurantId;
-    private List<CartItem> items;
+    private List<CartItem> items = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime expiresAt;
     private CartStatus status;
-
-    public Cart() {
-        // Default constructor for MongoDB
-        this.items = new ArrayList<>();
-    }
 
     public Cart(String cartId, String customerId) {
         if (cartId == null || cartId.trim().isEmpty()) {
@@ -44,6 +44,11 @@ public class Cart {
         this.updatedAt = LocalDateTime.now();
         this.expiresAt = LocalDateTime.now().plusHours(24); // Cart expires in 24 hours
         this.status = CartStatus.ACTIVE;
+    }
+
+    // Custom getter for items to return defensive copy
+    public List<CartItem> getItems() { 
+        return new ArrayList<>(items); 
     }
 
     public void addItem(CartItem item) {
@@ -177,30 +182,5 @@ public class Cart {
         if (isExpired()) {
             throw new IllegalStateException("Cannot modify expired cart");
         }
-    }
-
-    // Getters
-    public String getCartId() { return cartId; }
-    public String getCustomerId() { return customerId; }
-    public String getRestaurantId() { return restaurantId; }
-    public List<CartItem> getItems() { return new ArrayList<>(items); }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public LocalDateTime getExpiresAt() { return expiresAt; }
-    public CartStatus getStatus() { return status; }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-               "cartId='" + cartId + '\'' +
-               ", customerId='" + customerId + '\'' +
-               ", restaurantId='" + restaurantId + '\'' +
-               ", itemCount=" + items.size() +
-               ", totalAmount=" + getTotalAmount() +
-               ", status=" + status +
-               ", createdAt=" + createdAt +
-               ", updatedAt=" + updatedAt +
-               ", expiresAt=" + expiresAt +
-               '}';
     }
 }
