@@ -1,11 +1,16 @@
 package com.restaurant.restaurantservice.domain.model;
 
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Value object representing a restaurant address.
  * Encapsulates address validation and formatting logic.
  */
+@Getter
+@EqualsAndHashCode
+@ToString(of = {"street", "city", "zipCode", "country"})
 public class Address {
     
     private final String street;
@@ -33,44 +38,7 @@ public class Address {
         this.country = country.trim();
     }
 
-    public String getStreet() {
-        return street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
     public String getFormattedAddress() {
         return String.format("%s, %s %s, %s", street, city, zipCode, country);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return Objects.equals(street, address.street) &&
-               Objects.equals(city, address.city) &&
-               Objects.equals(zipCode, address.zipCode) &&
-               Objects.equals(country, address.country);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(street, city, zipCode, country);
-    }
-
-    @Override
-    public String toString() {
-        return getFormattedAddress();
     }
 }

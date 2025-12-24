@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.restaurant.events.DomainEvent;
@@ -42,7 +43,8 @@ public class Restaurant {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     
-    // Domain events to be published
+    // Domain events to be published (not persisted to MongoDB)
+    @Transient
     private transient List<DomainEvent> domainEvents = new ArrayList<>();
 
     // Default constructor for MongoDB

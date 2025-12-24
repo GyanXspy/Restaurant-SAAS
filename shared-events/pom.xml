@@ -103,14 +103,6 @@
             <optional>true</optional>
         </dependency>
         
-        <!-- Structured logging -->
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>7.4</version>
-            <optional>true</optional>
-        </dependency>
-        
         <!-- Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

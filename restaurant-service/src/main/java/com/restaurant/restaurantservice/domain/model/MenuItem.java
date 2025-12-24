@@ -1,13 +1,19 @@
 package com.restaurant.restaurantservice.domain.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Value object representing a menu item.
  * Encapsulates menu item validation and business rules.
  */
+@Getter
+@EqualsAndHashCode(of = "itemId")
+@ToString(of = {"itemId", "name", "price", "category", "available"})
 public class MenuItem {
     
     private final String itemId;
@@ -53,48 +59,5 @@ public class MenuItem {
 
     public MenuItem withDescription(String newDescription) {
         return new MenuItem(this.itemId, this.name, newDescription, this.price, this.category, this.available);
-    }
-
-    public String getItemId() {
-        return itemId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MenuItem menuItem = (MenuItem) o;
-        return Objects.equals(itemId, menuItem.itemId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(itemId);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("MenuItem{id='%s', name='%s', price=%s, category='%s', available=%s}",
-                itemId, name, price, category, available);
     }
 }

@@ -1,12 +1,14 @@
 package com.restaurant.payment.domain;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
-public interface PaymentRepository {
+@Repository
+public interface PaymentRepository extends JpaRepository<Payment, Long> {
     
-    void save(Payment payment);
-    
-    Optional<Payment> findById(String paymentId);
+    Optional<Payment> findByPaymentId(String paymentId);
     
     Optional<Payment> findByOrderId(String orderId);
 }

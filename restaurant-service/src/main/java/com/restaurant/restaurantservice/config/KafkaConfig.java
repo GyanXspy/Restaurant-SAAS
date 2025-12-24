@@ -22,6 +22,11 @@ public class KafkaConfig {
     private String deadLetterTopic;
 
     @Bean
+    public EventSerializer eventSerializer() {
+        return new EventSerializer();
+    }
+
+    @Bean
     public TopicResolver topicResolver() {
         return new DefaultTopicResolver();
     }

@@ -1,11 +1,6 @@
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\infrastructure\repository\OptimizedRestaurantRepository.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\application\controller\MenuController.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\application\controller\RestaurantController.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\config\KafkaConfig.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\application\mapper\RestaurantMapper.java
+D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\controller\RestaurantController.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\config\MongoIndexConfig.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\application\dto\MenuItemDto.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\application\dto\RestaurantDto.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\domain\validation\RestaurantValidator.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\domain\repository\RestaurantRepository.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\config\MongoConfig.java
@@ -15,9 +10,5 @@ D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaur
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\domain\validation\MenuItemValidator.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\domain\event\RestaurantAvailabilityChangedEvent.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\domain\model\Address.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\infrastructure\repository\RestaurantRepositoryImpl.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\application\dto\CreateRestaurantRequest.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\domain\service\RestaurantDomainService.java
 D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\domain\model\RestaurantId.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\application\dto\AddressDto.java
-D:\ORDER\Restaurant-SAAS\restaurant-service\src\main\java\com\restaurant\restaurantservice\infrastructure\repository\MongoRestaurantRepository.java

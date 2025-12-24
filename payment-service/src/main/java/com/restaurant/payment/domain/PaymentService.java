@@ -58,11 +58,11 @@ public class PaymentService {
     }
 
     public Optional<Payment> findPaymentById(String paymentId) {
-        return paymentRepository.findById(paymentId);
+        return paymentRepository.findByPaymentId(paymentId);
     }
 
     private Payment getPaymentById(String paymentId) {
-        return paymentRepository.findById(paymentId)
+        return paymentRepository.findByPaymentId(paymentId)
             .orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + paymentId));
     }
 

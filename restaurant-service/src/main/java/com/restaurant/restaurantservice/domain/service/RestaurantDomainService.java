@@ -40,6 +40,7 @@ public class RestaurantDomainService {
         
         // Publish domain events
         publishDomainEvents(savedRestaurant);
+        //restaurant-events
         
         return savedRestaurant;
     }

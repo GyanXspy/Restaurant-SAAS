@@ -4,6 +4,8 @@ import com.restaurant.events.DomainEvent;
 import com.restaurant.payment.domain.events.PaymentCompletedEvent;
 import com.restaurant.payment.domain.events.PaymentFailedEvent;
 import com.restaurant.payment.domain.events.PaymentInitiatedEvent;
+import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,22 +13,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "payments")
+@Getter
 public class Payment {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(unique = true, nullable = false)
     private String paymentId;
+    
+    @Column(nullable = false)
     private String orderId;
+    
+    @Column(nullable = false)
     private String customerId;
+    
+    @Column(nullable = false)
     private BigDecimal amount;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentMethod paymentMethod;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentStatus status;
+    
     private String paymentDetails;
     private String transactionId;
     private String failureReason;
     private String errorCode;
+    
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+    
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
     
+    @Transient
     private List<DomainEvent> uncommittedEvents = new ArrayList<>();
+    
+    @Version
     private int version = 0;
 
     // Default constructor for event sourcing
@@ -156,54 +186,5 @@ public class Payment {
                amount.compareTo(BigDecimal.ZERO) > 0 &&
                paymentMethod != null &&
                status == PaymentStatus.PENDING;
-    }
-
-    // Getters
-    public String getPaymentId() {
-        return paymentId;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public PaymentStatus getStatus() {
-        return status;
-    }
-
-    public String getPaymentDetails() {
-        return paymentDetails;
-    }
-
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-    public String getFailureReason() {
-        return failureReason;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 }
