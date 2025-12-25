@@ -24,7 +24,11 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-    basePackages = "com.restaurant.order.repository",
+    basePackages = {
+        "com.restaurant.order.repository",
+        "com.restaurant.order.eventstore",
+        "com.restaurant.order.dlq"
+    },
     entityManagerFactoryRef = "entityManagerFactory",
     transactionManagerRef = "transactionManager"
 )
@@ -66,7 +70,11 @@ public class DatabaseConfig {
         
         return builder
                 .dataSource(dataSource)
-                .packages("com.restaurant.order.model")
+                .packages(
+                    "com.restaurant.order.model",
+                    "com.restaurant.order.eventstore",
+                    "com.restaurant.order.dlq"
+                )
                 .persistenceUnit("write")
                 .properties(properties)
                 .build();
