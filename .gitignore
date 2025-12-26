@@ -1,0 +1,10 @@
+# Maven build output (all microservices)
+**/target/
+
+# Logs
+**/*.log
+
+# IDE files
+.idea/
+.vscode/
+*.iml
