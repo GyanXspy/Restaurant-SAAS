@@ -1,0 +1,213 @@
+### Cart Service API Tests
+### Base URL
+@baseUrl = http://localhost:8083
+@customerId = customer-123
+@restaurantId = restaurant-456
+
+###############################################
+# 1. Get Cart (Empty - should return 404)
+###############################################
+GET {{baseUrl}}/api/v1/carts/{{customerId}}
+Content-Type: application/json
+
+###############################################
+# 2. Add First Item to Cart
+###############################################
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "item-001",
+  "name": "Margherita Pizza",
+  "price": 12.99,
+  "quantity": 2,
+  "restaurantId": "{{restaurantId}}"
+}
+
+###############################################
+# 3. Add Second Item to Cart
+###############################################
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "item-002",
+  "name": "Caesar Salad",
+  "price": 8.50,
+  "quantity": 1,
+  "restaurantId": "{{restaurantId}}"
+}
+
+###############################################
+# 4. Add Third Item to Cart
+###############################################
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "item-003",
+  "name": "Garlic Bread",
+  "price": 4.99,
+  "quantity": 3,
+  "restaurantId": "{{restaurantId}}"
+}
+
+###############################################
+# 5. Get Cart (Should show all items)
+###############################################
+GET {{baseUrl}}/api/v1/carts/{{customerId}}
+Content-Type: application/json
+
+###############################################
+# 6. Update Item Quantity
+###############################################
+PUT {{baseUrl}}/api/v1/carts/{{customerId}}/items/item-001?quantity=5
+Content-Type: application/json
+
+###############################################
+# 7. Add Same Item Again (Should increase quantity)
+###############################################
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "item-002",
+  "name": "Caesar Salad",
+  "price": 8.50,
+  "quantity": 2,
+  "restaurantId": "{{restaurantId}}"
+}
+
+###############################################
+# 8. Get Cart (Verify updated quantities)
+###############################################
+GET {{baseUrl}}/api/v1/carts/{{customerId}}
+Content-Type: application/json
+
+###############################################
+# 9. Remove Item from Cart
+###############################################
+DELETE {{baseUrl}}/api/v1/carts/{{customerId}}/items/item-003
+Content-Type: application/json
+
+###############################################
+# 10. Get Cart (Verify item removed)
+###############################################
+GET {{baseUrl}}/api/v1/carts/{{customerId}}
+Content-Type: application/json
+
+###############################################
+# 11. Update Item Quantity to 0 (Should remove item)
+###############################################
+PUT {{baseUrl}}/api/v1/carts/{{customerId}}/items/item-002?quantity=0
+Content-Type: application/json
+
+###############################################
+# 12. Get Cart (Verify item removed)
+###############################################
+GET {{baseUrl}}/api/v1/carts/{{customerId}}
+Content-Type: application/json
+
+###############################################
+# 13. Clear Cart
+###############################################
+DELETE {{baseUrl}}/api/v1/carts/{{customerId}}
+Content-Type: application/json
+
+###############################################
+# 14. Get Cart (Should be empty or 404)
+###############################################
+GET {{baseUrl}}/api/v1/carts/{{customerId}}
+Content-Type: application/json
+
+###############################################
+# 15. Test Different Restaurant (Should fail)
+###############################################
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "item-004",
+  "name": "Burger",
+  "price": 9.99,
+  "quantity": 1,
+  "restaurantId": "{{restaurantId}}"
+}
+
+###
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "item-005",
+  "name": "Sushi Roll",
+  "price": 15.99,
+  "quantity": 1,
+  "restaurantId": "restaurant-999"
+}
+
+###############################################
+# 16. Test Multiple Customers
+###############################################
+POST {{baseUrl}}/api/v1/carts/customer-456/items
+Content-Type: application/json
+
+{
+  "itemId": "item-006",
+  "name": "Pasta Carbonara",
+  "price": 14.99,
+  "quantity": 1,
+  "restaurantId": "restaurant-789"
+}
+
+###
+GET {{baseUrl}}/api/v1/carts/customer-456
+Content-Type: application/json
+
+###############################################
+# 17. Test Invalid Data (Negative Price)
+###############################################
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "item-007",
+  "name": "Invalid Item",
+  "price": -5.00,
+  "quantity": 1,
+  "restaurantId": "{{restaurantId}}"
+}
+
+###############################################
+# 18. Test Invalid Data (Zero Quantity)
+###############################################
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "item-008",
+  "name": "Invalid Item",
+  "price": 10.00,
+  "quantity": 0,
+  "restaurantId": "{{restaurantId}}"
+}
+
+###############################################
+# 19. Test Invalid Data (Empty Item ID)
+###############################################
+POST {{baseUrl}}/api/v1/carts/{{customerId}}/items
+Content-Type: application/json
+
+{
+  "itemId": "",
+  "name": "Invalid Item",
+  "price": 10.00,
+  "quantity": 1,
+  "restaurantId": "{{restaurantId}}"
+}
+
+###############################################
+# 20. Health Check
+###############################################
+GET {{baseUrl}}/actuator/health
+Content-Type: application/json

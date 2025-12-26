@@ -1,0 +1,155 @@
+{
+  "info": {
+    "name": "Cart Service API",
+    "description": "API tests for Cart Service microservice",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8083",
+      "type": "string"
+    },
+    {
+      "key": "customerId",
+      "value": "customer-123",
+      "type": "string"
+    },
+    {
+      "key": "restaurantId",
+      "value": "restaurant-456",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Get Cart",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/carts/{{customerId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "carts", "{{customerId}}"]
+        }
+      }
+    },
+    {
+      "name": "2. Add Item - Pizza",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"itemId\": \"item-001\",\n  \"name\": \"Margherita Pizza\",\n  \"price\": 12.99,\n  \"quantity\": 2,\n  \"restaurantId\": \"{{restaurantId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/carts/{{customerId}}/items",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "carts", "{{customerId}}", "items"]
+        }
+      }
+    },
+    {
+      "name": "3. Add Item - Salad",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"itemId\": \"item-002\",\n  \"name\": \"Caesar Salad\",\n  \"price\": 8.50,\n  \"quantity\": 1,\n  \"restaurantId\": \"{{restaurantId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/carts/{{customerId}}/items",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "carts", "{{customerId}}", "items"]
+        }
+      }
+    },
+    {
+      "name": "4. Add Item - Garlic Bread",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"itemId\": \"item-003\",\n  \"name\": \"Garlic Bread\",\n  \"price\": 4.99,\n  \"quantity\": 3,\n  \"restaurantId\": \"{{restaurantId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/carts/{{customerId}}/items",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "carts", "{{customerId}}", "items"]
+        }
+      }
+    },
+    {
+      "name": "5. Update Item Quantity",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/carts/{{customerId}}/items/item-001?quantity=5",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "carts", "{{customerId}}", "items", "item-001"],
+          "query": [
+            {
+              "key": "quantity",
+              "value": "5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Remove Item",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/carts/{{customerId}}/items/item-003",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "carts", "{{customerId}}", "items", "item-003"]
+        }
+      }
+    },
+    {
+      "name": "7. Clear Cart",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/carts/{{customerId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "carts", "{{customerId}}"]
+        }
+      }
+    },
+    {
+      "name": "8. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/actuator/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["actuator", "health"]
+        }
+      }
+    }
+  ]
+}

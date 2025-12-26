@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Cart aggregate representing a customer's shopping cart.
  */
-@Document(collection = "carts")
+@Document(collection = "shopping_carts")
 @Getter
 @NoArgsConstructor
 @ToString(of = {"cartId", "customerId", "restaurantId", "status", "createdAt", "updatedAt", "expiresAt"})

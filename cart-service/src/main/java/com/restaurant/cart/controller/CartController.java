@@ -33,14 +33,14 @@ public class CartController {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Cart> getCart(@PathVariable String customerId) {
+    public ResponseEntity<Cart> getCart(@PathVariable("customerId") String customerId) {
         Optional<Cart> cart = cartService.findActiveCart(customerId);
         return cart.map(ResponseEntity::ok)
                   .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{customerId}/items")
-    public ResponseEntity<Cart> addItem(@PathVariable String customerId, @RequestBody CartItem item) {
+    public ResponseEntity<Cart> addItem(@PathVariable("customerId") String customerId, @RequestBody CartItem item) {
         try {
             Cart updatedCart = cartService.addItemToCart(customerId, item);
             return ResponseEntity.ok(updatedCart);
@@ -50,7 +50,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{customerId}/items/{itemId}")
-    public ResponseEntity<Cart> removeItem(@PathVariable String customerId, @PathVariable String itemId) {
+    public ResponseEntity<Cart> removeItem(@PathVariable("customerId") String customerId, @PathVariable("itemId") String itemId) {
         try {
             Cart updatedCart = cartService.removeItemFromCart(customerId, itemId);
             return ResponseEntity.ok(updatedCart);
@@ -60,9 +60,9 @@ public class CartController {
     }
 
     @PutMapping("/{customerId}/items/{itemId}")
-    public ResponseEntity<Cart> updateItemQuantity(@PathVariable String customerId, 
-                                                  @PathVariable String itemId, 
-                                                  @RequestParam int quantity) {
+    public ResponseEntity<Cart> updateItemQuantity(@PathVariable("customerId") String customerId, 
+                                                  @PathVariable("itemId") String itemId, 
+                                                  @RequestParam("quantity") int quantity) {
         try {
             Cart updatedCart = cartService.updateItemQuantity(customerId, itemId, quantity);
             return ResponseEntity.ok(updatedCart);
@@ -72,7 +72,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<Void> clearCart(@PathVariable String customerId) {
+    public ResponseEntity<Void> clearCart(@PathVariable("customerId") String customerId) {
         try {
             cartService.clearCart(customerId);
             return ResponseEntity.ok().build();
