@@ -52,7 +52,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/{restaurantId}")
-    public ResponseEntity<RestaurantResponse> getRestaurant(@PathVariable String restaurantId) {
+    public ResponseEntity<RestaurantResponse> getRestaurant(@PathVariable("restaurantId") String restaurantId) {
         Optional<Restaurant> restaurant = restaurantDomainService.findRestaurant(RestaurantId.of(restaurantId));
         
         return restaurant
@@ -70,7 +70,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/cuisine/{cuisine}")
-    public ResponseEntity<List<RestaurantResponse>> getRestaurantsByCuisine(@PathVariable String cuisine) {
+    public ResponseEntity<List<RestaurantResponse>> getRestaurantsByCuisine(@PathVariable("cuisine") String cuisine) {
         List<Restaurant> restaurants = restaurantDomainService.findRestaurantsByCuisine(cuisine);
         List<RestaurantResponse> response = restaurants.stream()
             .map(RestaurantResponse::fromRestaurant)
@@ -79,7 +79,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/city/{city}")
-    public ResponseEntity<List<RestaurantResponse>> getRestaurantsByCity(@PathVariable String city) {
+    public ResponseEntity<List<RestaurantResponse>> getRestaurantsByCity(@PathVariable("city") String city) {
         List<Restaurant> restaurants = restaurantDomainService.findRestaurantsByCity(city);
         List<RestaurantResponse> response = restaurants.stream()
             .map(RestaurantResponse::fromRestaurant)
@@ -89,7 +89,7 @@ public class RestaurantController {
 
     @PostMapping("/{restaurantId}/menu")
     public ResponseEntity<String> addMenuItem(
-            @PathVariable String restaurantId,
+            @PathVariable("restaurantId") String restaurantId,
             @RequestBody AddMenuItemRequest request) {
         try {
             Optional<Restaurant> restaurantOpt = restaurantDomainService.findRestaurant(RestaurantId.of(restaurantId));
@@ -117,7 +117,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{restaurantId}/activate")
-    public ResponseEntity<String> activateRestaurant(@PathVariable String restaurantId) {
+    public ResponseEntity<String> activateRestaurant(@PathVariable("restaurantId") String restaurantId) {
         try {
             Optional<Restaurant> restaurantOpt = restaurantDomainService.findRestaurant(RestaurantId.of(restaurantId));
             
@@ -136,7 +136,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{restaurantId}/deactivate")
-    public ResponseEntity<String> deactivateRestaurant(@PathVariable String restaurantId) {
+    public ResponseEntity<String> deactivateRestaurant(@PathVariable("restaurantId") String restaurantId) {
         try {
             Optional<Restaurant> restaurantOpt = restaurantDomainService.findRestaurant(RestaurantId.of(restaurantId));
             

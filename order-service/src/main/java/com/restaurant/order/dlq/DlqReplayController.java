@@ -29,7 +29,7 @@ public class DlqReplayController {
      */
     @PostMapping("/replay/{eventId}")
     @Operation(summary = "Replay a failed event from DLQ")
-    public ResponseEntity<DlqReplayResult> replayEvent(@PathVariable String eventId) {
+    public ResponseEntity<DlqReplayResult> replayEvent(@PathVariable("eventId") String eventId) {
         log.info("REST API: Replay request for event: {}", eventId);
         
         DlqReplayResult result = replayService.replayEvent(eventId);
@@ -70,7 +70,7 @@ public class DlqReplayController {
      */
     @GetMapping("/status/{status}")
     @Operation(summary = "Get DLQ messages by status")
-    public ResponseEntity<List<DlqReplayRecord>> getMessagesByStatus(@PathVariable DlqReplayStatus status) {
+    public ResponseEntity<List<DlqReplayRecord>> getMessagesByStatus(@PathVariable("status") DlqReplayStatus status) {
         log.info("REST API: Get DLQ messages with status: {}", status);
         List<DlqReplayRecord> messages = replayRepository.findByStatus(status);
         return ResponseEntity.ok(messages);
@@ -82,7 +82,7 @@ public class DlqReplayController {
      */
     @GetMapping("/event/{eventId}")
     @Operation(summary = "Get DLQ message details")
-    public ResponseEntity<DlqReplayRecord> getEventDetails(@PathVariable String eventId) {
+    public ResponseEntity<DlqReplayRecord> getEventDetails(@PathVariable("eventId") String eventId) {
         log.info("REST API: Get DLQ message details for event: {}", eventId);
         return replayRepository.findByEventId(eventId)
             .map(ResponseEntity::ok)
@@ -95,7 +95,7 @@ public class DlqReplayController {
      */
     @PutMapping("/reset/{eventId}")
     @Operation(summary = "Reset a failed event to PENDING status")
-    public ResponseEntity<DlqReplayRecord> resetEvent(@PathVariable String eventId) {
+    public ResponseEntity<DlqReplayRecord> resetEvent(@PathVariable("eventId") String eventId) {
         log.info("REST API: Reset event to PENDING: {}", eventId);
         
         return replayRepository.findByEventId(eventId)

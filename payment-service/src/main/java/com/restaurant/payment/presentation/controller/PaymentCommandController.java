@@ -47,7 +47,7 @@ public class PaymentCommandController {
 
     @PostMapping("/{paymentId}/complete")
     public ResponseEntity<String> completePayment(
-            @PathVariable String paymentId,
+            @PathVariable("paymentId") String paymentId,
             @RequestBody CompletePaymentRequest request) {
         try {
             paymentService.completePayment(paymentId, request.getTransactionId(), request.getGatewayResponse());
@@ -61,7 +61,7 @@ public class PaymentCommandController {
 
     @PostMapping("/{paymentId}/fail")
     public ResponseEntity<String> failPayment(
-            @PathVariable String paymentId,
+            @PathVariable("paymentId") String paymentId,
             @RequestBody FailPaymentRequest request) {
         try {
             paymentService.failPayment(

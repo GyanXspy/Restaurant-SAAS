@@ -44,7 +44,7 @@ public class UserController {
     }
     
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable String userId) {
+    public ResponseEntity<UserResponse> getUser(@PathVariable("userId") String userId) {
         return userService.getUserById(userId)
             .map(user -> ResponseEntity.ok(mapToResponse(user)))
             .orElse(ResponseEntity.notFound().build());
@@ -68,7 +68,7 @@ public class UserController {
     
     @PutMapping("/{userId}/profile")
     public ResponseEntity<UserResponse> updateProfile(
-            @PathVariable String userId,
+            @PathVariable("userId") String userId,
             @RequestBody UserProfile profile) {
         
         try {
@@ -81,7 +81,7 @@ public class UserController {
     }
     
     @PostMapping("/{userId}/deactivate")
-    public ResponseEntity<UserResponse> deactivateUser(@PathVariable String userId) {
+    public ResponseEntity<UserResponse> deactivateUser(@PathVariable("userId") String userId) {
         try {
             User user = userService.deactivateUser(userId);
             return ResponseEntity.ok(mapToResponse(user));

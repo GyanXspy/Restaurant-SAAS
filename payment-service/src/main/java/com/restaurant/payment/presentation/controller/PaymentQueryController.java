@@ -20,7 +20,7 @@ public class PaymentQueryController {
     }
 
     @GetMapping("/{paymentId}")
-    public ResponseEntity<PaymentDto> getPayment(@PathVariable String paymentId) {
+    public ResponseEntity<PaymentDto> getPayment(@PathVariable("paymentId") String paymentId) {
         Optional<Payment> payment = paymentService.findPaymentById(paymentId);
         
         if (payment.isPresent()) {
@@ -32,7 +32,7 @@ public class PaymentQueryController {
     }
 
     @GetMapping("/{paymentId}/status")
-    public ResponseEntity<PaymentStatusDto> getPaymentStatus(@PathVariable String paymentId) {
+    public ResponseEntity<PaymentStatusDto> getPaymentStatus(@PathVariable("paymentId") String paymentId) {
         Optional<Payment> payment = paymentService.findPaymentById(paymentId);
         
         if (payment.isPresent()) {
