@@ -125,4 +125,4 @@ Each service exposes actuator endpoints for monitoring:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is open source every one can contribute. 
